@@ -6,4 +6,9 @@ PROJECTS_HOME = ENV['PROJECTS_HOME'] || "../"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.box = "ubuntu/trusty64"
+  config.vm.network :private_network, :ip => "172.16.255.250"
+  config.vm.hostname = "node1"
+  config.vm.provider "virtualbox" do |v|
+    v.memory = 1024
+  end
 end
