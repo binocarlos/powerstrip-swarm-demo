@@ -12,14 +12,14 @@ apt-get update
 apt-get install -y \
   git
 
-cd ~
+cd /srv
 git clone $FLOCKER_BASE_REPO
-. ~/flocker-base-install/ubuntu/install.sh
+. /srv/flocker-base-install/ubuntu/install.sh
 flocker-base-install
 
-cd ~
+cd /srv
 git clone $POWERSTRIP_BASE_REPO
-. ~/powerstrip-base-install/ubuntu/lib.sh
+. /srv/powerstrip-base-install/ubuntu/lib.sh
 powerstrip-base-install-setup
 powerstrip-base-install-pullimages master
 powerstrip-base-install-pullimages minion
