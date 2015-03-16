@@ -3,7 +3,7 @@
 # this is to test everything works - it should NOT be part of the packaged box
 
 activate-service() {
-  bash /home/vagrant/powerstrip-base-install/ubuntu/install.sh service $1
+  bash /srv/powerstrip-base-install/ubuntu/install.sh service $1
 }
 
 echo 172.16.255.250 > /etc/flocker/my_address
