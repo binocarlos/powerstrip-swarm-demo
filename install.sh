@@ -11,12 +11,11 @@ fi
 # we run without -d so that process manager can manage the process properly
 cmd-swarm() {
   . /srv/powerstrip-base-install/ubuntu/lib.sh
-  local swarmips=$(cat /etc/flocker/swarmips)
   powerstrip-base-install-stop-container swarm
   DOCKER_HOST="unix:///var/run/docker.real.sock" \
   docker run --name swarm \
     -p 2375:2375 \
-    swarm manage -H 0.0.0.0:2375 $swarmips
+    swarm manage -H 0.0.0.0:2375 `cat /etc/flocker/swarmips`
 }
 
 
@@ -110,6 +109,7 @@ cmd-minion() {
   sleep 2
 
   # pull minion images
+  powerstrip-base-install-pullimage ubuntu:latest
   bash /srv/powerstrip-base-install/ubuntu/install.sh pullimages minion
   powerstrip-base-install-pullimage binocarlos/multi-http-demo-api
   powerstrip-base-install-pullimage binocarlos/multi-http-demo-server
