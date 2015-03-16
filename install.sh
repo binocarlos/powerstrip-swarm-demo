@@ -47,6 +47,9 @@ activate-service() {
 # basic setup such as copy this script to /srv
 init() {
   cp -f /vagrant/install.sh /srv/install.sh
+
+  # pull any updates we have made to the powerstrip-base-install script
+  cd /srv/powerstrip-base-install && git pull
   echo "copying keys to /root/.ssh"
   cp /vagrant/insecure_private_key /root/.ssh/id_rsa
   chmod 600 /root/.ssh/id_rsa
