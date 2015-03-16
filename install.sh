@@ -45,7 +45,7 @@ activate-service() {
 
 # basic setup such as copy this script to /srv
 init() {
-  cp -f /home/vagrant/install.sh /srv/install.sh
+  cp -f /vagrant/install.sh /srv/install.sh
   echo "copying keys to /root/.ssh"
   cp /vagrant/insecure_private_key /root/.ssh/id_rsa
   chmod 600 /root/.ssh/id_rsa
