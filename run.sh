@@ -84,7 +84,7 @@ EOF
   exit 1
 }
 
-cmd-runthough() {
+cmd-demo() {
   echo "Starting Database On DISK";
   cmd-start-api disk
   echo "Starting HTTP Server On NODE1"
@@ -128,7 +128,7 @@ main() {
   stop-server)           shift; cmd-stop-server $@;;
   hit-http)              shift; cmd-hit-http $@;;
   loop-http)             shift; cmd-loop-http $@;;
-  runthough)             shift; cmd-runthrough $@;;
+  demo)                  shift; cmd-demo $@;;
   ps)                    shift; cmd-ps $@;;
   info)                  shift; cmd-info $@;;
   *)                     usage $@;;
