@@ -40,6 +40,7 @@ SCRIPT
       v.memory = 1024
     end
     node2.vm.provision "shell", inline: <<SCRIPT
+mkdir -p /etc/flocker
 echo 172.16.255.252 > /etc/flocker/my_address
 echo 172.16.255.250 > /etc/flocker/master_address
 echo 172.16.255.251 > /etc/flocker/peer_address
@@ -54,6 +55,7 @@ SCRIPT
       v.memory = 1024
     end
     master.vm.provision "shell", inline: <<SCRIPT
+mkdir -p /etc/flocker
 echo 172.16.255.250 > /etc/flocker/my_address
 echo 172.16.255.250 > /etc/flocker/master_address
 echo 172.16.255.251:2375,172.16.255.252:2375 > /etc/flocker/swarmips
