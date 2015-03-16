@@ -60,14 +60,6 @@ init() {
 # the master expects the file /etc/flocker/swarm_addresses to be present
 cmd-master() {
 
-  # write the config passed from the Vagrantfile into the files used by powerstrip-base-inbstall
-  local myaddress="$1";
-  local swarmips="$2";
-  mkdir -p /etc/flocker
-  echo $myaddress > /etc/flocker/my_address
-  echo $myaddress > /etc/flocker/master_address
-  echo $swarmips > /etc/flocker/swarmips
-
   # init copies the SSH keys and copies this script so it can be referenced by the supervisor scripts
   init
 
@@ -89,13 +81,6 @@ cmd-master() {
 # /etc/flocker/my_address
 # /etc/flocker/master_address - master address
 cmd-minion() {
-
-  # write the config passed from the Vagrantfile into the files used by powerstrip-base-inbstall
-  local myaddress="$1"; shift;
-  local masteraddress="$1"; shift;
-  mkdir -p /etc/flocker
-  echo $myaddress > /etc/flocker/my_address
-  echo $masteraddress > /etc/flocker/master_address
 
   # init copies the SSH keys and copies this script so it can be referenced by the supervisor scripts
   init
