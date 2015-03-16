@@ -3,7 +3,8 @@
 export API_IP=${API_IP:=10.255.0.10}
 export SERVER_IP=${SERVER_IP:=10.255.0.11}
 export DOCKER_HOST=${DOCKER_HOST:=tcp://127.0.0.1:2375}
-export HTTP_IP=${HTTP_IP:=172.16.255.251}
+export NODE1_IP=${NODE1_IP:=172.16.255.251}
+export NODE2_IP=${NODE2_IP:=172.16.255.252}
 
 cmd-start-api() {
   local disktype="$1";
@@ -52,7 +53,7 @@ cmd-stop-server() {
 }
 
 cmd-hit-http(){
-  curl -L http://$HTTP_IP:8080
+  curl -L http://$NODE1_IP:8080
 }
 
 cmd-loop-http() {
@@ -85,30 +86,24 @@ EOF
 }
 
 cmd-demo() {
+  ssh root@$NODE1_IP echo 5000 > /proc/sys/net/ipv4/neigh/default/base_reachable_time_ms
+  ssh root@172.16.255.251 echo 5000 > /proc/sys/net/ipv4/neigh/default/base_reachable_time_ms
   echo "Starting Database On DISK";
   cmd-start-api disk
   echo "Starting HTTP Server On NODE1"
   cmd-start-server
-  echo "Wait 2 seconds"
   sleep 2
-  echo "Show Info"
-  info
-  echo "Show Containers"
-  ps
   echo "Hitting HTTP Server"
   cmd-loop-http
   echo "Stop Database"
-  cmd stop-api
+  cmd-stop-api
   echo "Start Database on SSD"
   cmd-start-api ssd
-  echo "Wait 2 seconds"
-  sleep 2
-  echo "Show Info"
-  info
-  echo "Show Containers"
-  ps
+  sleep 5
   echo "Hitting HTTP Server"
   cmd-loop-http
+  cmd-stop-server
+  cmd-stop-api
 
 }
 
