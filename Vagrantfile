@@ -37,7 +37,7 @@ SCRIPT
       v.memory = 1024
     end
     node1.vm.provision "shell", inline: <<SCRIPT
-bash /vagrant/install.sh minion 172.16.255.251 172.16.255.250
+bash /vagrant/install.sh minion 172.16.255.251 172.16.255.250 --label storage=disk
 SCRIPT
   end
 
@@ -48,7 +48,7 @@ SCRIPT
       v.memory = 1024
     end
     node2.vm.provision "shell", inline: <<SCRIPT
-bash /vagrant/install.sh minion 172.16.255.252 172.16.255.250
+bash /vagrant/install.sh minion 172.16.255.252 172.16.255.250 --label storage=ssd
 SCRIPT
   end
 end

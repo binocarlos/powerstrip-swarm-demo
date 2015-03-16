@@ -11,11 +11,12 @@ fi
 # we run without -d so that process manager can manage the process properly
 cmd-swarm() {
   . /srv/powerstrip-base-install/ubuntu/lib.sh
+  local swarmips=$(cat /etc/flocker/swarmips)
   powerstrip-base-install-stop-container swarm
   DOCKER_HOST="unix:///var/run/docker.real.sock" \
   docker run --name swarm \
     -p 2375:2375 \
-    swarm manage -H 0.0.0.0:2375 $MASTER_IP:2376,$MINION_IP:2376
+    swarm manage -H 0.0.0.0:2375 $swarmips
 }
 
 
@@ -24,7 +25,7 @@ cmd-swarm() {
 cmd-tcptunnel() {
   . /srv/powerstrip-base-install/ubuntu/lib.sh
   powerstrip-base-install-wait-for-container powerstrip
-  socat TCP-LISTEN:2376,reuseaddr,fork UNIX-CLIENT:/var/run/docker.sock
+  socat TCP-LISTEN:2375,reuseaddr,fork UNIX-CLIENT:/var/run/docker.sock
 }
 
 # a local way of writing a supervisor script
@@ -88,8 +89,8 @@ cmd-master() {
 cmd-minion() {
 
   # write the config passed from the Vagrantfile into the files used by powerstrip-base-inbstall
-  local myaddress="$1";
-  local masteraddress="$2";
+  local myaddress="$1"; shift;
+  local masteraddress="$1"; shift;
   mkdir -p /etc/flocker
   echo $myaddress > /etc/flocker/my_address
   echo $masteraddress > /etc/flocker/master_address
@@ -100,8 +101,18 @@ cmd-minion() {
   # include functions from the powerstrip lib
   . /srv/powerstrip-base-install/ubuntu/lib.sh
 
+  # write the labels to the docker deamon for the minion
+  powerstrip-base-install-configure-docker $@
+
+  sleep 5
+
+  echo "done";
+  exit
+
   # pull minion images
   bash /srv/powerstrip-base-install/ubuntu/install.sh pullimages minion
+  powerstrip-base-install-pullimage binocarlos/multi-http-demo-api
+  powerstrip-base-install-pullimage binocarlos/multi-http-demo-server
 
   # get the flocker / weave / powerstrip services to work
   activate-service flocker-zfs-agent
