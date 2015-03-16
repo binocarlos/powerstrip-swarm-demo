@@ -19,17 +19,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     config.cache.scope = :box
   end
 
-  config.vm.define "master" do |master|
-    master.vm.network :private_network, :ip => "172.16.255.250"
-    master.vm.hostname = "master"
-    master.vm.provider "virtualbox" do |v|
-      v.memory = 1024
-    end
-    master.vm.provision "shell", inline: <<SCRIPT
-bash /vagrant/install.sh master 172.16.255.250 172.16.255.251:2375,172.16.255.252:2375
-SCRIPT
-  end
-
   config.vm.define "node1" do |node1|
     node1.vm.network :private_network, :ip => "172.16.255.251"
     node1.vm.hostname = "node1"
@@ -51,4 +40,16 @@ SCRIPT
 bash /vagrant/install.sh minion 172.16.255.252 172.16.255.250 --label storage=ssd
 SCRIPT
   end
+
+  config.vm.define "master" do |master|
+    master.vm.network :private_network, :ip => "172.16.255.250"
+    master.vm.hostname = "master"
+    master.vm.provider "virtualbox" do |v|
+      v.memory = 1024
+    end
+    master.vm.provision "shell", inline: <<SCRIPT
+bash /vagrant/install.sh master 172.16.255.250 172.16.255.251:2375,172.16.255.252:2375
+SCRIPT
+  end
+
 end
