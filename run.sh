@@ -98,7 +98,7 @@ cmd-demo() {
   echo "Hitting HTTP Server"
   cmd-loop-http
   echo "Stop Database"
-  cmd stop-server
+  cmd stop-api
   echo "Start Database on SSD"
   cmd-start-api ssd
   echo "Wait 2 seconds"
