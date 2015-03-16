@@ -86,8 +86,6 @@ EOF
 }
 
 cmd-demo() {
-  ssh root@$NODE1_IP echo 5000 > /proc/sys/net/ipv4/neigh/default/base_reachable_time_ms
-  ssh root@172.16.255.251 echo 5000 > /proc/sys/net/ipv4/neigh/default/base_reachable_time_ms
   echo "Starting Database On DISK";
   cmd-start-api disk
   echo "Starting HTTP Server On NODE1"
