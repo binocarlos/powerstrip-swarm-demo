@@ -27,6 +27,7 @@ cmd-tcptunnel() {
   socat TCP-LISTEN:2376,reuseaddr,fork UNIX-CLIENT:/var/run/docker.sock
 }
 
+# a local way of writing a supervisor script
 write-service() {
   local service="$1";
 
@@ -34,6 +35,12 @@ write-service() {
 [program:$service]
 command=bash /srv/install.sh $service
 EOF
+}
+
+# a local way to start the services which calls the copied out version of this script
+# this is because /vagrant is not mounted until later in the boot process
+activate-service() {
+  bash /srv/powerstrip-base-install/ubuntu/install.sh service $1
 }
 
 # basic setup such as copy this script to /srv
@@ -49,34 +56,62 @@ init() {
 # here we build ontop of powerstrip-base-install and get swarm working on top
 # the master expects the file /etc/flocker/swarm_addresses to be present
 cmd-master() {
+
+  # write the config passed from the Vagrantfile into the files used by powerstrip-base-inbstall
   local myaddress="$1";
   local swarmips="$2";
   mkdir -p /etc/flocker
   echo $myaddress > /etc/flocker/my_address
-  echo $myadderss > /etc/flocker/master_address
+  echo $myaddress > /etc/flocker/master_address
   echo $swarmips > /etc/flocker/swarmips
 
+  # init copies the SSH keys and copies this script so it can be referenced by the supervisor scripts
   init
 
+  # include functions from the powerstrip lib
   . /srv/powerstrip-base-install/ubuntu/lib.sh
+
+  # pull master images
   bash /srv/powerstrip-base-install/ubuntu/install.sh pullimages master
   powerstrip-base-install-pullimage swarm
+
+  # get the control + swarm to work
   activate-service flocker-control
   write-service swarm
+
+  # start services
+  supervisorctl reload
 }
 
 # /etc/flocker/my_address
 # /etc/flocker/master_address - master address
 cmd-minion() {
+
+  # write the config passed from the Vagrantfile into the files used by powerstrip-base-inbstall
   local myaddress="$1";
   local masteraddress="$2";
   mkdir -p /etc/flocker
   echo $myaddress > /etc/flocker/my_address
   echo $masteraddress > /etc/flocker/master_address
 
+  # init copies the SSH keys and copies this script so it can be referenced by the supervisor scripts
   init
 
+  # include functions from the powerstrip lib
+  . /srv/powerstrip-base-install/ubuntu/lib.sh
+
+  # pull minion images
   bash /srv/powerstrip-base-install/ubuntu/install.sh pullimages minion
+
+  # get the flocker / weave / powerstrip services to work
+  activate-service flocker-zfs-agent
+  activate-service powerstrip-flocker
+  activate-service powerstrip-weave
+  activate-service powerstrip
+  write-service tcptunnel
+
+  # start services
+  supervisorctl reload
 }
 
 usage() {
