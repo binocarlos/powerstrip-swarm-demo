@@ -26,7 +26,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       v.memory = 1024
     end
     node1.vm.provision "shell", inline: <<SCRIPT
-bash /vagrant/install.sh minion 172.16.255.251 172.16.255.250 --label storage=disk
+mkdir -p /etc/flocker
+echo 172.16.255.251 > /etc/flocker/my_address
+echo 172.16.255.250 > /etc/flocker/master_address
+bash /vagrant/install.sh minion --label storage=disk
 SCRIPT
   end
 
@@ -37,7 +40,10 @@ SCRIPT
       v.memory = 1024
     end
     node2.vm.provision "shell", inline: <<SCRIPT
-bash /vagrant/install.sh minion 172.16.255.252 172.16.255.250 --label storage=ssd
+echo 172.16.255.252 > /etc/flocker/my_address
+echo 172.16.255.250 > /etc/flocker/master_address
+echo 172.16.255.251 > /etc/flocker/peer_address
+bash /vagrant/install.sh minion --label storage=ssd
 SCRIPT
   end
 
@@ -48,7 +54,10 @@ SCRIPT
       v.memory = 1024
     end
     master.vm.provision "shell", inline: <<SCRIPT
-bash /vagrant/install.sh master 172.16.255.250 172.16.255.251:2375,172.16.255.252:2375
+echo 172.16.255.250 > /etc/flocker/my_address
+echo 172.16.255.250 > /etc/flocker/master_address
+echo 172.16.255.251:2375,172.16.255.252:2375 > /etc/flocker/swarmips
+bash /vagrant/install.sh master
 SCRIPT
   end
 
