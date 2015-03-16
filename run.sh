@@ -3,10 +3,15 @@
 export API_IP=${API_IP:=10.255.0.10}
 export SERVER_IP=${SERVER_IP:=10.255.0.11}
 export DOCKER_HOST=${DOCKER_HOST:=tcp://127.0.0.1:2375}
-export SERVER_IP=${SERVER_IP:=172.16.255.251}
+export HTTP_IP=${SERVER_IP:=172.16.255.251}
 
 cmd-start-api() {
   local disktype="$1";
+
+  if [[ -z $disktype ]]; then
+    >&2 echo "disktype must be passed to start-api"
+    exit 1
+  fi
   local dockerruncmd="";
   read -d '' dockerruncmd << EOF
 docker run -d \
@@ -33,6 +38,7 @@ docker run -d \
   --name demo-server \
   -e constraint:storage==disk \
   -e WEAVE_CIDR=$SERVER_IP/24 \
+  -e API_IP=$API_IP \
   -p 8080:80 \
   binocarlos/multi-http-demo-server:latest
 EOF
@@ -46,7 +52,7 @@ cmd-stop-server() {
 }
 
 cmd-hit-http(){
-  curl -L http://$SERVER_IP:8080/
+  curl -L http://$HTTP_IP:8080
 }
 
 cmd-loop-http() {
@@ -78,29 +84,53 @@ EOF
   exit 1
 }
 
-runthough() {
-  echo "run through";
+cmd-runthough() {
+  echo "Starting Database On DISK";
+  cmd-start-api disk
+  echo "Starting HTTP Server On NODE1"
+  cmd-start-server
+  echo "Wait 2 seconds"
+  sleep 2
+  echo "Show Info"
+  info
+  echo "Show Containers"
+  ps
+  echo "Hitting HTTP Server"
+  cmd-loop-http
+  echo "Stop Database"
+  cmd stop-server
+  echo "Start Database on SSD"
+  cmd-start-api ssd
+  echo "Wait 2 seconds"
+  sleep 2
+  echo "Show Info"
+  info
+  echo "Show Containers"
+  ps
+  echo "Hitting HTTP Server"
+  cmd-loop-http
+
 }
 
-ps() {
+cmd-ps() {
   docker ps -a
 }
 
-info() {
+cmd-info() {
   docker info
 }
 
 main() {
   case "$1" in
-  start-api)             shift; start-api $@;;
-  stop-api)              shift; stop-api $@;;
-  start-server)          shift; start-server $@;;
-  stop-server)           shift; stop-server $@;;
+  start-api)             shift; cmd-start-api $@;;
+  stop-api)              shift; cmd-stop-api $@;;
+  start-server)          shift; cmd-start-server $@;;
+  stop-server)           shift; cmd-stop-server $@;;
   hit-http)              shift; cmd-hit-http $@;;
   loop-http)             shift; cmd-loop-http $@;;
-  runthough)             shift; runthrough $@;;
-  ps)                    shift; ps $@;;
-  info)                  shift; info $@;;
+  runthough)             shift; cmd-runthrough $@;;
+  ps)                    shift; cmd-ps $@;;
+  info)                  shift; cmd-info $@;;
   *)                     usage $@;;
   esac
 }
