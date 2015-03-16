@@ -14,6 +14,8 @@ First you need to install:
 To run the demo:
 
 ```bash
+$ git clone https://github.com/binocarlos/powerstrip-swarm-demo
+$ cd powerstrip-swarm-demo
 $ vagrant up
 $ vagrant ssh master
 $ sudo bash /vagrant/run.sh demo
