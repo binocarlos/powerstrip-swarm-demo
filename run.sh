@@ -3,7 +3,7 @@
 export API_IP=${API_IP:=10.255.0.10}
 export SERVER_IP=${SERVER_IP:=10.255.0.11}
 export DOCKER_HOST=${DOCKER_HOST:=tcp://127.0.0.1:2375}
-export HTTP_IP=${SERVER_IP:=172.16.255.251}
+export HTTP_IP=${HTTP_IP:=172.16.255.251}
 
 cmd-start-api() {
   local disktype="$1";
