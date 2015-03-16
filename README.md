@@ -16,7 +16,7 @@ To run the demo:
 ```bash
 $ vagrant up
 $ vagrant ssh master
-$ bash /vagrant/run.sh demo
+$ sudo bash /vagrant/run.sh demo
 ```
 
 ## about
