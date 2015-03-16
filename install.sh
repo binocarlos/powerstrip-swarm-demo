@@ -104,10 +104,7 @@ cmd-minion() {
   # write the labels to the docker deamon for the minion
   powerstrip-base-install-configure-docker $@
 
-  sleep 5
-
-  echo "done";
-  exit
+  sleep 2
 
   # pull minion images
   bash /srv/powerstrip-base-install/ubuntu/install.sh pullimages minion
