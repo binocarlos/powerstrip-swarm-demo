@@ -125,6 +125,14 @@ cmd-minion() {
   supervisorctl reload
 }
 
+cmd-weave() {
+  DOCKER_HOST="unix:///var/run/docker.real.sock" \
+  docker run -ti --rm \
+    -e DOCKER_SOCKET="/var/run/docker.real.sock" \
+    -v /var/run/docker.real.sock:/var/run/docker.sock \
+    binocarlos/powerstrip-weave $@
+}
+
 usage() {
 cat <<EOF
 Usage:
@@ -132,6 +140,7 @@ install.sh master
 install.sh minion
 install.sh tcptunnel
 install.sh swarm
+install.sh weave
 install.sh help
 EOF
   exit 1
@@ -143,6 +152,7 @@ main() {
   minion)                   shift; cmd-minion $@;;
   tcptunnel)                shift; cmd-tcptunnel $@;;
   swarm)                    shift; cmd-swarm $@;;
+  weave)                    shift; cmd-weave $@;;
   *)                        usage $@;;
   esac
 }
