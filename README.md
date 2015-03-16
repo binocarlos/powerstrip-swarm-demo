@@ -21,6 +21,24 @@ $ vagrant ssh master
 $ sudo bash /vagrant/run.sh demo
 ```
 
+## info
+
+You can see the state of the swarm by doing this on the master:
+
+```bash
+$ vagrant ssh master
+$ DOCKER_HOST=localhost:2375 docker ps -a
+```
+
+This displays the containers used for powerstrip, flocker and weave
+
+You can see the state of the weave network by doing this on node1 or node2:
+
+```bash
+$ vagrant ssh node1
+$ sudo bash /vagrant/install.sh weave status
+```
+
 ## about
 
 This demo consists of 3 servers - a master and 2 nodes.
