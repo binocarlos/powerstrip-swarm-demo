@@ -85,21 +85,34 @@ EOF
   exit 1
 }
 
+show-message() {
+  echo ""
+  echo "#"
+  echo "# $1"
+  echo "#"
+  echo ""
+}
+
 cmd-demo() {
-  echo "Starting Database On DISK";
+  show-message "Starting Database On DISK";
   cmd-start-api disk
-  echo "Starting HTTP Server On NODE1"
+  show-message "Starting HTTP Server On NODE1"
   cmd-start-server
   sleep 2
-  echo "Hitting HTTP Server"
+  show-message "docker ps | grep demo-api"
+  cmd-ps | grep demo-api
+  show-message "Hitting HTTP Server"
   cmd-loop-http
-  echo "Stop Database"
+  show-message "Stop Database"
   cmd-stop-api
-  echo "Start Database on SSD"
+  show-message "Start Database on SSD"
   cmd-start-api ssd
-  sleep 5
-  echo "Hitting HTTP Server"
+  sleep 2
+  show-message "docker ps | grep demo-api"
+  cmd-ps | grep demo-api
+  show-message "Hitting HTTP Server"
   cmd-loop-http
+  show-message "Closing server & api"
   cmd-stop-server
   cmd-stop-api
 
