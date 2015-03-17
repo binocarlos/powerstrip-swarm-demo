@@ -108,6 +108,8 @@ cmd-minion() {
 
   # start services
   supervisorctl reload
+
+  echo 2000 > /proc/sys/net/ipv4/neigh/default/base_reachable_time_ms
 }
 
 cmd-weave() {
