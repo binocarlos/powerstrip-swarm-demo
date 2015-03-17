@@ -30,7 +30,6 @@ mkdir -p /etc/flocker
 echo 172.16.255.251 > /etc/flocker/my_address
 echo 172.16.255.250 > /etc/flocker/master_address
 bash /vagrant/install.sh minion --label storage=disk
-echo 2000 > /proc/sys/net/ipv4/neigh/default/base_reachable_time_ms
 SCRIPT
   end
 
@@ -46,7 +45,6 @@ echo 172.16.255.252 > /etc/flocker/my_address
 echo 172.16.255.250 > /etc/flocker/master_address
 echo 172.16.255.251 > /etc/flocker/peer_address
 bash /vagrant/install.sh minion --label storage=ssd
-echo 2000 > /proc/sys/net/ipv4/neigh/default/base_reachable_time_ms
 SCRIPT
   end
 
