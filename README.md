@@ -9,7 +9,7 @@ First you need to install:
  * [virtualbox](https://www.virtualbox.org/wiki/Downloads)
  * [vagrant](http://www.vagrantup.com/downloads.html)
 
-## run
+## start vms
 
 To run the demo:
 
@@ -17,8 +17,15 @@ To run the demo:
 $ git clone https://github.com/binocarlos/powerstrip-swarm-demo
 $ cd powerstrip-swarm-demo
 $ vagrant up
+```
+
+## automated example
+
+We have included a script that will run through each of the commands shown above.  To run the script, run the following commnads:
+
+```bash
 $ vagrant ssh master
-$ sudo bash /vagrant/run.sh demo
+master$ sudo bash /vagrant/run.sh demo
 ```
 
 ## info
@@ -27,7 +34,7 @@ You can see the state of the swarm by doing this on the master:
 
 ```bash
 $ vagrant ssh master
-$ DOCKER_HOST=localhost:2375 docker ps -a
+master$ DOCKER_HOST=localhost:2375 docker ps -a
 ```
 
 This displays the containers used for powerstrip, flocker and weave
@@ -36,7 +43,7 @@ You can see the state of the weave network by doing this on node1 or node2:
 
 ```bash
 $ vagrant ssh node1
-$ sudo bash /vagrant/install.sh weave status
+node1$ sudo bash /vagrant/install.sh weave status
 ```
 
 ## about
