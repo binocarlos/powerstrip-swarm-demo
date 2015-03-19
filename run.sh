@@ -29,7 +29,12 @@ EOF
 }
 
 cmd-stop-api() {
-  docker rm -f demo-api
+  read -d '' dockerruncmd << EOF
+docker rm -f demo-api
+EOF
+
+  echo $dockerruncmd;
+  eval $dockerruncmd;
 }
 
 cmd-start-server() {
@@ -49,15 +54,27 @@ EOF
 }
 
 cmd-stop-server() {
-  docker rm -f demo-server
+  read -d '' dockerruncmd << EOF
+docker rm -f demo-server
+EOF
+
+  echo $dockerruncmd;
+  eval $dockerruncmd;
 }
 
 cmd-hit-http(){
-  curl -L http://$NODE1_IP:8080
+  read -d '' curlcmd << EOF
+curl -L http://$NODE1_IP:8080
+EOF
+
+  if [[ -n "$1" ]]; then
+    echo $curlcmd;
+  fi
+  eval $curlcmd;
 }
 
 cmd-loop-http() {
-  cmd-hit-http
+  cmd-hit-http show
   cmd-hit-http
   cmd-hit-http
   cmd-hit-http
@@ -85,6 +102,12 @@ EOF
   exit 1
 }
 
+wait-for-key() {
+  echo
+  read -p "Press any key to continue... " -n1 -s
+  echo
+}
+
 show-message() {
   echo ""
   echo "#"
@@ -94,24 +117,33 @@ show-message() {
 }
 
 cmd-demo() {
-  show-message "Starting Database On DISK";
-  cmd-start-api disk
   show-message "Starting HTTP Server On NODE1"
   cmd-start-server
-  sleep 2
+  wait-for-key
+  show-message "Starting Database API On DISK"
+  cmd-start-api disk
   show-message "docker ps | grep demo-api"
   cmd-ps | grep demo-api
+  show-message "Notice how the database (demo-api) is running on node1 (disk)"
+  wait-for-key
   show-message "Hitting HTTP Server"
   cmd-loop-http
+  show-message "We have created some state on the disk based server (the number)"
+  wait-for-key
   show-message "Stop Database"
   cmd-stop-api
+  wait-for-key
   show-message "Start Database on SSD"
   cmd-start-api ssd
-  sleep 2
+  wait-for-key
   show-message "docker ps | grep demo-api"
   cmd-ps | grep demo-api
+  show-message "Notice how the database (demo-api) is now running on node2 (ssd)"
+  wait-for-key
   show-message "Hitting HTTP Server"
   cmd-loop-http
+  show-message "The state and the IP address have both moved to node2!"
+  wait-for-key
   show-message "Closing server & api"
   cmd-stop-server
   cmd-stop-api
