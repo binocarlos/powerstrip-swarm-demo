@@ -74,6 +74,9 @@ cmd-master() {
   activate-service flocker-control
   write-service swarm
 
+  # set the DOCKER_HOST to point to swarm
+  echo DOCKER_HOST=localhost:2375 >> /etc/environment
+
   # start services
   supervisorctl reload
 }
