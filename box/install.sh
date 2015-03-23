@@ -24,3 +24,7 @@ powerstrip-base-install-setup
 powerstrip-base-install-pullimages master
 powerstrip-base-install-pullimages minion
 powerstrip-base-install-powerstrip-config
+
+DOCKER_HOST=unix:///var/run/docker.real.sock docker pull swarm
+DOCKER_HOST=unix:///var/run/docker.real.sock docker pull binocarlos/multi-http-demo-api
+DOCKER_HOST=unix:///var/run/docker.real.sock docker pull binocarlos/multi-http-demo-server
