@@ -120,7 +120,7 @@ cmd-demo() {
   show-message "Starting HTTP Server On NODE1"
   cmd-start-server
   wait-for-key
-  show-message "Starting Database API On DISK"
+  show-message "Starting Database API On NODE1 (disk)"
   cmd-start-api disk
   show-message "docker ps | grep demo-api"
   cmd-ps | grep demo-api
@@ -128,12 +128,12 @@ cmd-demo() {
   wait-for-key
   show-message "Hitting HTTP Server"
   cmd-loop-http
-  show-message "We have created some state on the disk based server (the number)"
+  show-message "We have created some state on the disk based server"
   wait-for-key
   show-message "Stop Database"
   cmd-stop-api
   wait-for-key
-  show-message "Start Database on SSD"
+  show-message "Start Database on NODE2 (ssd)"
   cmd-start-api ssd
   wait-for-key
   show-message "docker ps | grep demo-api"
