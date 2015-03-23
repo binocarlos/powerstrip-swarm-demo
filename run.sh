@@ -3,6 +3,7 @@
 export API_IP=${API_IP:=10.255.0.10}
 export SERVER_IP=${SERVER_IP:=10.255.0.11}
 export DOCKER_HOST=${DOCKER_HOST:=tcp://127.0.0.1:2375}
+export TEST_MODE=${TEST_MODE:=}
 export NODE1_IP=${NODE1_IP:=172.16.255.251}
 export NODE2_IP=${NODE2_IP:=172.16.255.252}
 
@@ -103,17 +104,23 @@ EOF
 }
 
 wait-for-key() {
-  echo
-  read -p "Press any key to continue... " -n1 -s
-  echo
+  # only wait for a key when not in test mode
+  if [[ -z "$TEST_MODE" ]]; then
+    echo
+    read -p "Press any key to continue... " -n1 -s
+    echo
+  fi
 }
 
 show-message() {
-  echo ""
-  echo "#"
-  echo "# $1"
-  echo "#"
-  echo ""
+  # only print the messages when not in test mode
+  if [[ -z "$TEST_MODE" ]]; then
+    echo ""
+    echo "#"
+    echo "# $1"
+    echo "#"
+    echo ""
+  fi
 }
 
 cmd-demo() {

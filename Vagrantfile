@@ -12,8 +12,8 @@ ENV['VAGRANT_DEFAULT_PROVIDER'] = 'virtualbox'
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
  
-  config.vm.box_url = "http://storage.googleapis.com/experiments-clusterhq/orchestration-demos/powerstrip-swarm-demo-v1.box"
-  config.vm.box = "powerstrip-swarm-demo-v1"
+  config.vm.box_url = "http://storage.googleapis.com/experiments-clusterhq/orchestration-demos/powerstrip-swarm-demo-v2.box"
+  config.vm.box = "powerstrip-swarm-demo-v2"
 
   if Vagrant.has_plugin?("vagrant-cachier")
     config.cache.scope = :box

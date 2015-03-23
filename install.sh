@@ -67,8 +67,8 @@ cmd-master() {
   . /srv/powerstrip-base-install/ubuntu/lib.sh
 
   # pull master images
-  bash /srv/powerstrip-base-install/ubuntu/install.sh pullimages master
-  powerstrip-base-install-pullimage swarm
+  #bash /srv/powerstrip-base-install/ubuntu/install.sh pullimages master
+  #powerstrip-base-install-pullimage swarm
 
   # get the control + swarm to work
   activate-service flocker-control
@@ -97,10 +97,10 @@ cmd-minion() {
   sleep 2
 
   # pull minion images
-  powerstrip-base-install-pullimage ubuntu:latest
-  bash /srv/powerstrip-base-install/ubuntu/install.sh pullimages minion
-  powerstrip-base-install-pullimage binocarlos/multi-http-demo-api
-  powerstrip-base-install-pullimage binocarlos/multi-http-demo-server
+  #powerstrip-base-install-pullimage ubuntu:latest
+  #bash /srv/powerstrip-base-install/ubuntu/install.sh pullimages minion
+  #powerstrip-base-install-pullimage binocarlos/multi-http-demo-api
+  #powerstrip-base-install-pullimage binocarlos/multi-http-demo-server
 
   # get the flocker / weave / powerstrip services to work
   activate-service flocker-zfs-agent
@@ -112,7 +112,7 @@ cmd-minion() {
   # start services
   supervisorctl reload
 
-  echo 5000 > /proc/sys/net/ipv4/neigh/default/base_reachable_time_ms
+  echo 2000 > /proc/sys/net/ipv4/neigh/default/base_reachable_time_ms
 }
 
 cmd-weave() {
