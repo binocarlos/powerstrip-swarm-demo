@@ -2,6 +2,8 @@
 
 A demo of [powerstrip-flocker](https://github.com/clusterhq/powerstrip-flocker) and [powerstrip-weave](https://github.com/binocarlos/powerstrip-weave) working with [swarm](https://github.com/docker/swarm)
 
+[![asciicast](https://asciinema.org/a/19305.png)](https://asciinema.org/a/19305)
+
 ## install
 
 First you need to install:
