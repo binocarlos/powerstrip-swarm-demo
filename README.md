@@ -192,3 +192,21 @@ Now we close the 2 containers
 master$ docker rm -f demo-api
 master$ docker rm -f demo-server
 ```
+
+## run tests
+
+To run the acceptance tests:
+
+```bash
+$ make test
+```
+
+This will `vagrant up` and then `bash test.sh`.
+
+`test.sh` will use `vagrant ssh -c ""` style commands to run through the following tests:
+
+ * a basic data migration using powerstrip-flocker
+ * launch the web and api servers and hit with curl checking output
+ * kill the api server
+ * migrate the api server
+ * hit the web server checking the output contains the tag: ssd meaning the migration happened
