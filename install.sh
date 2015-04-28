@@ -67,7 +67,7 @@ cmd-master() {
   . /srv/powerstrip-base-install/ubuntu/lib.sh
 
   # pull master images
-  bash /srv/powerstrip-base-install/ubuntu/install.sh pullimages master
+  #bash /srv/powerstrip-base-install/ubuntu/install.sh pullimages master
   #powerstrip-base-install-pullimage swarm
 
   # get the control + swarm to work
@@ -98,7 +98,7 @@ cmd-minion() {
 
   # pull minion images
   #powerstrip-base-install-pullimage ubuntu:latest
-  bash /srv/powerstrip-base-install/ubuntu/install.sh pullimages minion
+  #bash /srv/powerstrip-base-install/ubuntu/install.sh pullimages minion
   #powerstrip-base-install-pullimage binocarlos/multi-http-demo-api
   #powerstrip-base-install-pullimage binocarlos/multi-http-demo-server
 
